@@ -2,5 +2,8 @@ import sqlite3
 
 
 def conn_sqlite():
-    conn = sqlite3.connect('email_telephone_db')
-    return conn
+    return "sqlite:///C:\\Users\\Boca_\\OneDrive\\Impacta\\Faculdade\\Semestre5\\WorkSpacePython\\Desenvolvimento_de_Sistemas_de_Informa-o\\database.db"
+
+
+def generic_response(status, message, data):
+    return {"Status": status, "Mensagem": message, "Dados": data}
