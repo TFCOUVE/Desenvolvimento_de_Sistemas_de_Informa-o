@@ -1,5 +1,5 @@
 from main import App
-from flask import request
+from flask import request, jsonify
 
 
 @App.route('/status', methods=["GET"])
@@ -9,10 +9,13 @@ def first_response():
 
 @App.route('/calculator', methods=["POST"])
 def calculator():
-    data = request.get_json()
-    from ac3.Utils.Utils import decode_jwt
-    json = data["jwt"]
-    x = decode_jwt(json)
-    from ac3.Services.Service import calc
-    total = calc(x["operation"], x["number_1"], x["number_2"])
-    return total
+    data = request.data
+    from ac3.Utils.Utils import decode_jwt, jwt_auth
+    x = decode_jwt(data)
+    y = jwt_auth(x["username"], x["password"])
+    if y is False:
+        return 'Invalid User or Password'
+    else:
+        from ac3.Services.Service import calc
+        total = calc(x["op"], x["n1"], x["n2"])
+        return jsonify(total)

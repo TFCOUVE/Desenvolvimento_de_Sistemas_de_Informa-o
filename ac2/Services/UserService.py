@@ -31,8 +31,8 @@ def verify_value(value, value_type):
         telegram = 1
     elif value_type == 'telephone':
         telephone = 1
-    data = Record.query.filter_by(value=value, email_flag=email, telephone_flag=telephone, telegram_flag=telegram,
-                                  confirmed_status='Confirmed').first()
+    data = Record.query.filter_by(value=value, email_flag=email, telephone_flag=telephone,
+                                  telegram_flag=telegram).first()
     if data is None:
         return None
     else:
