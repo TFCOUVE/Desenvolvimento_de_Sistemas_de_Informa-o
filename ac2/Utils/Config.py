@@ -6,4 +6,4 @@ def conn_sqlite():
 
 
 def generic_response(status, message, data):
-    return {"Status": status, "Mensagem": message, "Dados": data}
+    return {"Status": status, "Message": message, "Data": data}

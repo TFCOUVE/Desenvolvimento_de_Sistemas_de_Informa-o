@@ -20,7 +20,7 @@ def create_value(user_id, value, value_type):
     return rec.id
 
 
-def verify_value(value, value_type):
+def recovery_value(value, value_type):
     from ac2.Model.Record import Record
     email = 0
     telegram = 0
@@ -60,35 +60,29 @@ def list_many_values(user_id):
     return records
 
 
-def update_value(record_id, user_id, value, value_type, value_status):
+def activate_value(value, value_type, user_id):
     from ac2.Model.Record import Record
     from main import db
+    record_id = recovery_value(value, value_type)
     rec = Record.query.filter_by(id=record_id).first()
-    rec.id = record_id
-    rec.value = value
-    rec.user_id = user_id
-    rec.confirmed_status = value_status
-    rec.email_flag = False
-    rec.telephone_flag = False
-    rec.telegram_flag = False
-    if value_type == 'email':
-        rec.email_flag = True
-    elif value_type == 'telegram':
-        rec.telegram_flag = True
-    elif value_type == 'telephone':
-        rec.telephone_flag = True
-    dic = {"ID": rec.id, "USER_ID": rec.user_id, "VALUE": rec.value}
-    if rec.telephone_flag is True:
-        dic.update({"TYPE": 'Telephone'})
-    elif rec.telegram_flag is True:
-        dic.update({"TYPE": 'Telegram'})
-    elif rec.email_flag is True:
-        dic.update({"TYPE": 'Email'})
+    if rec.user_id == user_id:
+        rec.id = record_id
     else:
-        dic.update({"TYPE": 'Not Recorded'})
-    x = verify_value(rec.value, value_type)
-    if x is not None:
-        return 'Already exist'
+        return 'User Id Incorrect'
+    rec.confirmed_status = 'Confirmed'
+    db.session.commit()
+    return 'Value Activated'
+
+
+def cancel_value(value, value_type, user_id):
+    from ac2.Model.Record import Record
+    from main import db
+    record_id = recovery_value(value, value_type)
+    rec = Record.query.filter_by(id=record_id).first()
+    if rec.user_id == user_id:
+        rec.id = record_id
     else:
-        db.session.commit()
-        return dic
+        return 'User Id Incorrect'
+    rec.confirmed_status = 'Cancel'
+    db.session.commit()
+    return 'Value Canceled'
