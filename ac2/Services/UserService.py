@@ -66,19 +66,31 @@ def canceled_value(record_id):
 
 
 def listing_by_user_id(json):
-    dic = []
+    from ac2.Model.Record import Record
+    list_of_dic = []
     for row in json:
-        from ac2.Model.Record import Record
-        data = Record.query.filter_by(user_id=row)
+        data = Record.query.filter(Record.user_id.like(row))
         if data is None:
             continue
         else:
-            dic.append({"user_id": data.user_id, "value": data.value, "type": data.type})
-    return dic
+            for i in data:
+                list_of_dic.append(
+                    {"user_id": i.user_id, "value": i.value, "type": i.value_type, "status": i.confirmed_status})
+    return list_of_dic
 
 
 def listing_by_value(json):
-    return ''
+    from ac2.Model.Record import Record
+    list_of_dic = []
+    for row in json:
+        data = Record.query.filter_by(value=row["value"], value_type=row["type"]).all()
+        if data is None:
+            continue
+        else:
+            for i in data:
+                list_of_dic.append(
+                    {"user_id": i.user_id, "value": i.value, "type": i.value_type, "status": i.confirmed_status})
+    return list_of_dic
 
 # def create_value(user_id, value, value_type):
 #     from ac2.Model.Record import Record

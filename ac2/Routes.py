@@ -90,7 +90,16 @@ def list_by_user_id():
         return Response(e, 500)
 
 
-@App.route('/list_by_value')
+@App.route('/list_by_value', methods=["POST"])
 def list_by_value():
     data = request.get_json()
-    pass
+    from ac2.Services.UserService import listing_by_value
+    try:
+        response = listing_by_value(data)
+        if len(response) == 0:
+            return jsonify('not found'), 200
+        else:
+            return jsonify(response), 200
+    except Exception as e:
+        print(e)
+        return Response(e, 500)
