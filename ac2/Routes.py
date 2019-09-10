@@ -74,94 +74,23 @@ def cancel_value():
             else:
                 return Response('Value not registered', 406)
 
-# from ac2.Services.UserService import recovery_value
-# x = recovery_value(value, value_type)
-# if x is not None:
-#     return 'Value already registered', 200
-# else:
-#     try:
-#         from ac2.Services.UserService import create_value
-#         record_id = create_value(user, value, value_type)
-#        from ac2.Utils.Config import generic_response
-#         response = generic_response('Succeed', 'Value Creation succeed', record_id)
-#         return jsonify(response), 200
-#     except Exception as e:
-#         print(e)
-#         return Response(e, 500)
-#
-#
-# @App.route('/list_values/<int:user_id>')
-# def list_values(user_id):
-#     from ac2.Services.UserService import list_many_values
-#     try:
-#         from ac2.Utils.Config import generic_response
-#         data = list_many_values(user_id)
-#         response = generic_response('Succeed', 'Found Value', data=data)
-#         return jsonify(response), 200
-#     except Exception as e:
-#         print(e)
-#         return e
-#
-#
-# @App.route('/activate_value', methods=["POST"])
-# def activate_value():
-#     from ac2.Services.UserService import activate_value
-#     data = request.get_json()
-#     user_id = data["id"]
-#     if user_id is None:
-#         return 'Need Id'
-#     value = data["value"]
-#     if value is None:
-#         return 'Need Value'
-#     value_type = data["type"]
-#     if value_type is None:
-#         return 'Need Type'
-#     from ac2.Services.UserService import recovery_value
-#     x = recovery_value(value, value_type)
-#     if x is None:
-#         return 'Value not registered', 200
-#     try:
-#         record_id = activate_value(value, value_type, user_id)
-#         from ac2.Utils.Config import generic_response
-#         response = generic_response('Succeed', 'Value activation succeed', record_id)
-#         return jsonify(response), 200
-#     except Exception as e:
-#         print(e)
-#         return e
-#
-#
-# @App.route('/cancel_value', methods=["POST"])
-# def value_cancel():
-#     from ac2.Services.UserService import activate_value
-#     data = request.get_json()
-#     user_id = data["id"]
-#     if user_id is None:
-#         return 'Need Id'
-#     value = data["value"]
-#     if value is None:
-#         return 'Need Value'
-#     value_type = data["type"]
-#     if value_type is None:
-#         return 'Need Type'
-#     from ac2.Services.UserService import recovery_value
-#     x = recovery_value(value, value_type)
-#     if x is None:
-#         return 'Value not registered', 200
-#     try:
-#         record_id = activate_value(value, value_type, user_id)
-#         from ac2.Utils.Config import generic_response
-#         response = generic_response('Succeed', 'Value activation succeed', record_id)
-#         return jsonify(response), 200
-#     except Exception as e:
-#         print(e)
-#         return e
-#
-#
-# @App.route('/list_by_value_type', methods=["POST"])
-# def list_value():
-#     pass
-#
-#
-# @App.route('/verify_value', methods=["POST"])
-# def create_user():
-#     pass
+
+@App.route('/list_by_user_id', methods=["POST"])
+def list_by_user_id():
+    data = request.get_json()
+    from ac2.Services.UserService import listing_by_user_id
+    try:
+        response = listing_by_user_id(data)
+        if len(response) == 0:
+            return jsonify('not found'), 204
+        else:
+            return jsonify(response), 200
+    except Exception as e:
+        print(e)
+        return Response(e, 500)
+
+
+@App.route('/list_by_value')
+def list_by_value():
+    data = request.get_json()
+    pass

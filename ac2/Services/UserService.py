@@ -11,7 +11,9 @@ def verify_json(json):
     value_type = json["type"]
     if value_type is None:
         return False
-    return True
+    else:
+        if value_type == 'email' and value_type == 'telefone' and value_type == 'telegram':
+            return True
 
 
 def verify_db_value(json_value, json_value_type):
@@ -62,6 +64,21 @@ def canceled_value(record_id):
     db.session.commit()
     return 'Value Cancel', 200
 
+
+def listing_by_user_id(json):
+    dic = []
+    for row in json:
+        from ac2.Model.Record import Record
+        data = Record.query.filter_by(user_id=row)
+        if data is None:
+            continue
+        else:
+            dic.append({"user_id": data.user_id, "value": data.value, "type": data.type})
+    return dic
+
+
+def listing_by_value(json):
+    return ''
 
 # def create_value(user_id, value, value_type):
 #     from ac2.Model.Record import Record
