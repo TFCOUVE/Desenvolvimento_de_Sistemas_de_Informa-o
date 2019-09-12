@@ -37,8 +37,16 @@ def create_value(json_user_id, json_value, json_value_type):
     return rec.id
 
 
-def verify_value():
-    return True
+def verify_value(value_type, value):
+    from ac2.Utils.Utils import verify_email, verify_telegram, verifica_main
+    if value_type == 'email':
+        return verify_email(value)
+    elif value_type == 'telefone':
+        return verifica_main(value)
+    elif value_type == 'telegram':
+        return verify_telegram(value)
+    else:
+        return False
 
 
 def activate_value(record_id):
