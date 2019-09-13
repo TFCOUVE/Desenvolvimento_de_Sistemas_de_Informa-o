@@ -12,7 +12,7 @@ def verify_json(json):
     if value_type is None:
         return False
     else:
-        if value_type == 'email' and value_type == 'telefone' and value_type == 'telegram':
+        if value_type == 'email' or value_type == 'telefone' or value_type == 'telegram':
             return True
 
 
